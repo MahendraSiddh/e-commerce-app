@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { FaSearch, FaHeart, FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
 
+import isUserLogedin from '../../shared/isUserLogedin'
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const isLoged = isUserLogedin();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -69,15 +73,29 @@ const Navbar = () => {
                 </button>
               </div>
             </form>
-            <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/wishlist'>
-              <FaHeart />
-            </a>
-            <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/profile'>
-              <FaUser />
-            </a>
-            <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/cart'>
-              <FaShoppingCart />
-            </a>
+            {
+               !isLoged && <a href='/login' class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
+
+            }
+            {
+               !isLoged && <a href='/signup' class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign up</a>
+
+            }
+            {
+               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/wishlist'>
+               <FaHeart />
+             </a>
+            }
+            {
+               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/profile'>
+               <FaUser />
+             </a>
+            }
+            {
+               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/cart'>
+               <FaShoppingCart />
+             </a>
+            }
           </div>
           <div className="md:hidden flex items-center">
             <button
@@ -122,15 +140,31 @@ const Navbar = () => {
               </form>
             </div>
             <div className="mt-3 px-2 space-y-1">
-              <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/wishlist'>
+              {
+                !isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/login'>
+                 Login
+              </a>
+              }
+              {
+                !isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/signup'>
+                 Sign up
+              </a>
+              }
+              {
+                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/wishlist'>
                 <FaHeart className="mr-3" /> Favorites
               </a>
-              <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/profile'>
+              }
+              {
+                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/profile'>
                 <FaUser className="mr-3" /> Profile
               </a>
-              <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/cart'>
+              }
+              {
+                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/cart'>
                 <FaShoppingCart className="mr-3" /> Cart
               </a>
+              }
             </div>
           </div>
         </div>
