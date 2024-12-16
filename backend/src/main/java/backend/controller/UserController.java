@@ -15,8 +15,19 @@ public class UserController {
     CustomUserService userService;
 
     @PostMapping("/register")
-    public CustomUser registor(@RequestBody CustomUser user)
+    public String registor(@RequestBody CustomUser user)
     {
-        return userService.register(user);
+        System.out.println(user);
+        String password = user.getPassword();
+        userService.register(user);
+        user.setPassword(password);
+        return userService.verify(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody CustomUser user)
+    {
+        //return "hello";
+        return userService.verify(user);
     }
 }

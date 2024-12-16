@@ -9,15 +9,11 @@ import jakarta.persistence.Table;
 public class CustomUser {
     
     @Id
-    private int id;
     private String username;
     private String password;
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+    private String email;
+    private String userType;
+
     public String getUsername() {
         return username;
     }
@@ -30,6 +26,18 @@ public class CustomUser {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getUserType() {
+        return userType;
+    }
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+    
     
 }

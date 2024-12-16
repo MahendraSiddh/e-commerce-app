@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch, FaHeart, FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
 
-import isUserLogedin from '../../shared/isUserLogedin'
+import isUserLogedin from '../../utils/isUserLogegdin'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLogged,setIsLoged] = useState(false);
 
-  const isLoged = isUserLogedin();
+  useEffect(()=>{
+    setIsLoged(isUserLogedin());
+  },[isLogged]);
+
+  const handleLogeOut = ()=>{
+     localStorage.removeItem('token');
+     setIsLoged(false);
+  }
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -16,7 +24,7 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
-    // Implement search logic here
+    // search logic here
   };
 
   const navItems = [
@@ -38,7 +46,7 @@ const Navbar = () => {
 }]
   return (
     <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-2 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <a href="/" className="flex-shrink-0">
@@ -64,7 +72,7 @@ const Navbar = () => {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="bg-gray-100 rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-100 rounded-full py-2 px-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -74,28 +82,48 @@ const Navbar = () => {
               </div>
             </form>
             {
-               !isLoged && <a href='/login' class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
+               !isLogged && <a href='/login' className="inline-block mx-2 px-4 py-2 
+              bg-purple-600 hover:bg-purple-700 
+              text-white font-bold 
+              rounded-lg shadow-md 
+              transition duration-300 ease-in-out 
+              focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">Login</a>
 
             }
             {
-               !isLoged && <a href='/signup' class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign up</a>
+               !isLogged && <a href='/signup' className="inline-block mx-2 px-4 py-2 
+              bg-purple-600 hover:bg-purple-700 
+              text-white font-bold 
+              rounded-lg shadow-md 
+              transition duration-300 ease-in-out 
+              focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">Sign up</a>
 
             }
             {
-               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/wishlist'>
+               isLogged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/wishlist'>
                <FaHeart />
              </a>
             }
             {
-               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/profile'>
+               isLogged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/profile'>
                <FaUser />
              </a>
             }
             {
-               isLoged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/cart'>
+               isLogged && <a className="text-gray-700 hover:text-blue-500 px-3 py-2" href='/cart'>
                <FaShoppingCart />
              </a>
             }
+            {
+                isLogged && <button onClick={handleLogeOut} type="button" className="inline-block px-4 py-2 
+                bg-purple-600 hover:bg-purple-700 
+                text-white font-bold 
+                rounded-lg shadow-md 
+                transition duration-300 ease-in-out 
+                focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                Log Out
+                </button>
+             }
           </div>
           <div className="md:hidden flex items-center">
             <button
@@ -141,30 +169,35 @@ const Navbar = () => {
             </div>
             <div className="mt-3 px-2 space-y-1">
               {
-                !isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/login'>
+                !isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/login'>
                  Login
               </a>
               }
               {
-                !isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/signup'>
+                !isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/signup'>
                  Sign up
               </a>
               }
               {
-                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/wishlist'>
+                isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/wishlist'>
                 <FaHeart className="mr-3" /> Favorites
               </a>
               }
               {
-                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/profile'>
+                isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/profile'>
                 <FaUser className="mr-3" /> Profile
               </a>
               }
               {
-                isLoged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/cart'>
+                isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/cart'>
                 <FaShoppingCart className="mr-3" /> Cart
               </a>
               }
+              {
+                isLogged && <button onClick={handleLogeOut} type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                  Log Out
+                </button>
+             }
             </div>
           </div>
         </div>
