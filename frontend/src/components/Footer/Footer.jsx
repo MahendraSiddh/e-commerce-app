@@ -9,7 +9,7 @@ const Footer = ({content}) => {
         <div className='flex justify-around'>
             {content?.items && content?.items?.map((item,index)=>{
                 return (
-                    <div className='flex flex-col'>
+                    <div key={index} className='flex flex-col'>
                     <p className='text-[16px] pb-[10px]'>{item?.title}</p>
                     {item?.list && item?.list?.map((listItem,index)=><a className='flex flex-col text-[12px] py-2'
                      href={listItem?.path}>{listItem?.label}</a>)}

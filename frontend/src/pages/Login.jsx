@@ -1,36 +1,63 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 const Login = () => {
+  
+  const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
+    email:'',
+    userType:'customer'
   });
   const [error, setError] = useState('');
 
+  // Store token in localStorage when it changes
+  useEffect(() => {
+    if (token) {
+      localStorage.removeItem('token');
+      localStorage.setItem('token', token);
+    }
+  }, [token]);
+
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Basic validation
-    if (!formData.email || !formData.password) {
+    // Form validation
+    if (!formData.username || !formData.password || !formData.email) {
       setError('Please fill in all fields');
       return;
     }
 
-    // Here you would typically send the login data to an API
-    console.log('Login attempt with:', formData);
-    // Simulating an API call
-    setTimeout(() => {
-      alert('Login functionality would be implemented here');
-    }, 500);
+    //console.log(formData);
+    
+    try {
+      const response = await axios.post("http://localhost:8080/login", formData);
+      
+      //Jwt token
+      const jwtToken = response.data;
+      //console.log(response.data);
+      setToken(jwtToken);
+      window.location.href = "/";
+    } catch (error) {
+      //console.error("Error during login:", error);
+      if (error.response && error.response.status === 401) {
+        setError("Invalid email or password.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -38,23 +65,21 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login to your account
+            Log in to your account
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email-address" className="sr-only">Email address</label>
+              <label htmlFor="username" className="sr-only">Username</label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                placeholder="Username"
+                value={formData.username}
                 onChange={handleChange}
               />
             </div>
@@ -64,54 +89,50 @@ const Login = () => {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <div>
+              <label htmlFor="email" className="sr-only">Email address</label>
               <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                id="email"
+                name="email"
+                type="email"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={formData.email}
+                onChange={handleChange}
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
             </div>
-
-            <div className="text-sm">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Forgot your password?
-              </a>
+            <div>
+              <label htmlFor="userType" className="sr-only">User Type</label>
+              <select
+                id="userType"
+                name="userType"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                value={formData.userType}
+                onChange={handleChange}
+              >
+                <option value="customer">Customer</option>
+                <option value="seller">Seller</option>
+              </select>
             </div>
           </div>
-
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             >
-              Login
+              Log in
             </button>
           </div>
         </form>
-        <div className="text-sm text-center">
-          <a href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-            Create new account
-          </a>
-        </div>
       </div>
     </div>
   );
