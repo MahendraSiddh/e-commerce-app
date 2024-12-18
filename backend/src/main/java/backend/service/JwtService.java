@@ -21,7 +21,7 @@ public class JwtService {
     private String SECRECT_KEY = "06b058a08c633327a2c8e2af2952a09f7b39d3ad3d8ee396afae380151d5568839531a662bd806ab7913b85dcdca8df292fcfc36a7fb718634d39eecff0154138cfe782be52dfb530bb690974ec8b379ca3aa3f2f8ddc1f19d387e408e743f752147a652aedf7d86d8b4e46cc32a6b73fc0d9a46f9dcab0c8c5f0567cae0d3c4";
     Map<String,Object>claims = new HashMap<>();
 
-    String generateToken(String username)
+    public String generateToken(String username)
     {
         return Jwts.builder()
             .claims()

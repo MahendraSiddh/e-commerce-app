@@ -7,5 +7,6 @@ import backend.model.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+    
 }
 

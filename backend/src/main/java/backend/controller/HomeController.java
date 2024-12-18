@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import backend.service.CustomUserDetailsService;
-
+import backend.service.impl.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -17,7 +16,7 @@ public class HomeController {
     @GetMapping("/home")
     public String getHome(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse)
     {
-        return "You have api acsess";
+        return "You have api acess";
     }
     
 }
