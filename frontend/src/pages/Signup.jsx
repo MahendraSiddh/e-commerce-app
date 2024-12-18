@@ -2,22 +2,14 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 const Signup = () => {
-  const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
-    username: '',
+    userName: '',
     password: '',
     email:'',
     userType:'customer'
   });
   const [error, setError] = useState('');
 
-  // Store token in localStorage when it changes
-  useEffect(() => {
-    if (token) {
-      localStorage.removeItem('token');
-      localStorage.setItem('token', token);
-    }
-  }, [token]);
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -36,7 +28,7 @@ const Signup = () => {
     console.log("before api acess",formData);
 
     // Form validation
-    if (!formData.username || !formData.password || !formData.email) {
+    if (!formData.userName || !formData.password || !formData.email) {
 
       setError('Please fill in all fields');
       return;
@@ -48,13 +40,16 @@ const Signup = () => {
       
       const response = await axios.post("http://localhost:8080/register", formData);
       
-      //Jwt token
-      const jwtToken = response.data;
-      //console.log(response.data);
-      setToken(jwtToken);
-      window.location.href = "/";
+      if(response.status===200)
+      {
+         window.location.href = '/emailverify';
+      }else
+      {
+        setError("Check you details ");
+      }
+      
     } catch (error) {
-      //console.error("Error during signup:", error);
+      console.error("Error during signup:", error);
       if (error.response && error.response.status === 401) {
         setError("Invalid username or password.");
       } else {
@@ -73,15 +68,15 @@ const Signup = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="sr-only">Username</label>
+              <label htmlFor="userName" className="sr-only">Username</label>
               <input
-                id="username"
-                name="username"
+                id="userName"
+                name="userName"
                 type="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                 placeholder="Username"
-                value={formData.username}
+                value={formData.userName}
                 onChange={handleChange}
               />
             </div>

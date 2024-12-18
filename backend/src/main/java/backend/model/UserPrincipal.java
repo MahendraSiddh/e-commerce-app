@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserPrincipal implements UserDetails {
 
-    CustomUser user;
-    public UserPrincipal(CustomUser user)
+    Users user;
+    public UserPrincipal(Users user)
     {
         this.user = user;
     }

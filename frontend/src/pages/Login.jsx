@@ -5,10 +5,8 @@ const Login = () => {
   
   const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
     email:'',
-    userType:'customer'
+    password: ''
   });
   const [error, setError] = useState('');
 
@@ -35,7 +33,7 @@ const Login = () => {
     setError('');
 
     // Form validation
-    if (!formData.username || !formData.password || !formData.email) {
+    if (!formData.password || !formData.email) {
       setError('Please fill in all fields');
       return;
     }
@@ -70,19 +68,20 @@ const Login = () => {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="username" className="sr-only">Username</label>
+          <div>
+              <label htmlFor="email" className="sr-only">Email address</label>
               <input
-                id="username"
-                name="username"
-                type="text"
+                id="email"
+                name="email"
+                type="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={formData.email}
                 onChange={handleChange}
               />
             </div>
+            
             <div>
               <label htmlFor="password" className="sr-only">Password</label>
               <input
@@ -96,32 +95,7 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="userType" className="sr-only">User Type</label>
-              <select
-                id="userType"
-                name="userType"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                value={formData.userType}
-                onChange={handleChange}
-              >
-                <option value="customer">Customer</option>
-                <option value="seller">Seller</option>
-              </select>
-            </div>
+            
           </div>
 
           <div>
