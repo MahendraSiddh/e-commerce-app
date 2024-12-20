@@ -1,15 +1,16 @@
-package backend.response;
+package backend.request;
 
 import jakarta.persistence.Lob;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
-@Builder
-public class ItemResponse {
 
+@Builder
+public class ItemRequest {
     private String name;
     private Long cost;
     private String type;
@@ -18,4 +19,5 @@ public class ItemResponse {
 
     @Lob
     private String base64Image;
+
 }

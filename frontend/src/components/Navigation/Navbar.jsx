@@ -6,15 +6,15 @@ import isUserLogedin from '../../utils/isUserLogegdin'
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLogged,setIsLoged] = useState(false);
+  const [isLogged,setIsLogged] = useState(false);
 
   useEffect(()=>{
-    setIsLoged(isUserLogedin());
+    setIsLogged(isUserLogedin());
   },[isLogged]);
 
   const handleLogeOut = ()=>{
      localStorage.removeItem('token');
-     setIsLoged(false);
+     setIsLogged(false);
   }
 
   const toggleMenu = () => {

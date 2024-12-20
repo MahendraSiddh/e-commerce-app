@@ -1,22 +1,26 @@
-import React from 'react'
-import womenData from '../content/womenData'
-import Card from '../components/common/Card'
+import React, { useEffect, useState } from 'react'
+import getFilteredItems from '../utils/getItemsByFilter';
+import ShowItems from '../components/common/ShowItems';
 
 
 const Women = () => {
+
+  const [items, setItems] = useState([]);
+
+  useEffect(()=>{
+    async function getItems() {
+      const fetchedItems = await getFilteredItems("women");
+      if(fetchedItems)
+      {
+        setItems(fetchedItems);
+      }
+    }
+    getItems();
+  },[])
+
   return (
     <div>
-      
-      <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-center' >
-        {
-           womenData.map((card,index)=>(
-
-            <div  key={index} >
-                <Card card={card} />
-             </div>
-           ))
-        }
-      </div>
+      <ShowItems items={items} />
     </div>
   )
 }
