@@ -17,6 +17,7 @@ import Profile from './pages/Profile'
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import EmailVerify from './pages/EmailVerify';
+import ItemUpload from './pages/ItemUpload';
 
 const App = () => {
   return (
@@ -36,8 +37,7 @@ const App = () => {
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>}/>
             <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>}/>
             <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>}/>
-
-
+            <Route path='/itemUpload' element={<PrivateRoute><ItemUpload/></PrivateRoute>}/>
             <Route path='*' element={<Home/>}/>
           </Routes>
     </div>

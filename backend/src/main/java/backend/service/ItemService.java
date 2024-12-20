@@ -1,24 +1,19 @@
 package backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import backend.model.Item;
-import backend.repository.ItemRepository;
 
 
-@Service
-public class ItemService {
+public interface ItemService {
 
-    @Autowired
-    private ItemRepository itemRepository;
+    void saveItem(Item item);
 
-    public void saveItem(Item item) throws Exception{
-        itemRepository.save(item);
-    }
+    Item getItemById(Long id);
 
-    public Item getItemById(Long id)
-    {
-        return itemRepository.findById(id).orElse(null);
-    }
+    List<Item> allItems();
+
+    List<Item> itemsByColor(String color);
+
+    List<Item> itemsByType(String type);
 }
