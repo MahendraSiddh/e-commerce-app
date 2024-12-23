@@ -9,6 +9,6 @@ import lombok.Setter;
 @Builder
 public class RegisterResponse {
 
-    private String userName;
+    private String username;
     private String email;
 }

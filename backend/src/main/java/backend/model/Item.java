@@ -1,5 +1,9 @@
 package backend.model;
 
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +17,12 @@ import lombok.Setter;
 @Setter
 @Builder
 @Entity
-@Table(name = "item")
+@Table(name = "items")
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     private String name;
     private String type;
@@ -28,6 +32,11 @@ public class Item {
 
     @Lob
     private String base64Image;
+
+    @ManyToOne
+    @JoinColumn(name="users_id", nullable=false)
+    @JsonBackReference
+    private Users owner;
 
 }
 

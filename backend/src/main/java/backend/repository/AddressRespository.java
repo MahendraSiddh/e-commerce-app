@@ -5,12 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import backend.model.Users;
+import backend.model.Address;
 
 @Repository
-public interface UsersRepository extends JpaRepository<Users,UUID> {
+public interface AddressRespository extends JpaRepository<Address,UUID> {
     
-    Users findByUsername(String username);
-
-    Users findByEmail(String email);
 }

@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 @Builder
 public class ItemRequest {
     private String name;
+    private String ownerEmail;
     private Long cost;
     private String type;
     private String color;
@@ -19,5 +19,5 @@ public class ItemRequest {
 
     @Lob
     private String base64Image;
-
+    
 }

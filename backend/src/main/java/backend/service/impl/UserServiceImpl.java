@@ -1,6 +1,7 @@
 package backend.service.impl;
 
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import backend.model.Item;
 import backend.model.Users;
 import backend.repository.UsersRepository;
 import backend.request.RegisterRequest;
@@ -49,7 +51,7 @@ public class UserServiceImpl implements UserService {
                 .username(registerRequest.getUserName())
                 .email(registerRequest.getEmail())
                 .password(registerRequest.getPassword())
-                .userType(registerRequest.getUserType())
+                .role(registerRequest.getRole())
                 .build();
         String otp = generateOTP();
         users.setOtp(otp);
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
         sendVerificationEmail(savedUser.getEmail(), otp);
 
         RegisterResponse response = RegisterResponse.builder()
-                .userName(users.getUsername())
+                .username(users.getUsername())
                 .email(users.getEmail())
                 .build();
         return response;
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
             .username(savedUser.getUsername())
             .password(password)
             .email(savedUser.getEmail())
-            .userType(savedUser.getUserType())
+            .role(savedUser.getRole())
             .verified(savedUser.isVerified())
             .otp(savedUser.getOtp())
             .build();
@@ -121,7 +123,7 @@ public class UserServiceImpl implements UserService {
         //System.out.println("auth is :");
         if(isAuthencticated)
         {
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(user.getUsername(),user.getRole());
         }else return "failed";
     }
 
@@ -139,5 +141,47 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    @Override
+    public Users findByEmail(String ownerEmail) {
+        
+        return userRepository.findByEmail(ownerEmail);
+    }
+
+
+    @Override
+    public void addToCart(Item item, String username) {
+        
+        Users user = userRepository.findByUsername(username);
+
+        user.getCart().add(item);
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public List<Item> getCart(String username) {
+        Users user = userRepository.findByUsername(username);
+        List<Item> cart = user.getCart();
+        return cart;
+    }
+
+
+    @Override
+    public void addIem(Item item,String email) {
+       Users user = userRepository.findByEmail(email);
+
+       user.getItems().add(item);
+
+       userRepository.save(user);
+    }
+
+    @Override
+    public void removeItemFromCart(Item item, String username){
+
+        Users user = userRepository.findByUsername(username);
+        user.getCart().remove(item);
+        userRepository.save(user);
+    }
     
 }

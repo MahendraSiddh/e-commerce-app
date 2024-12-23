@@ -12,7 +12,7 @@ const Home = () => {
     async function getItems() {
       const fetchedItems = await fetchAllItems();
       if (fetchedItems) {
-        setItems(fetchedItems); // Set the fetched items into state
+        setItems(fetchedItems);
       }
     }
     
@@ -23,7 +23,7 @@ const Home = () => {
 
   return (
     <div>
-      <ShowItems items={items} />
+      <ShowItems items={items} insideCart={false} />
     </div>
   )
 }

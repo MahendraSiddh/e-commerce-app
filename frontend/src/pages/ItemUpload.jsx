@@ -1,59 +1,52 @@
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-const ItemUpload = () => {
+const ItemUploadForm = () => {
 
   const token = localStorage.getItem('token');
-  const [item, setItem] = useState({
+
+  const [formData, setFormData] = useState({
     name: '',
+    ownerEmail: '',
     cost: '',
     type: '',
     color: '',
     description: '',
-    image: null
+    base64Image: ''
   });
-  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setItem(prevItem => ({
-      ...prevItem,
+    setFormData(prevData => ({
+      ...prevData,
       [name]: value
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1];
-        setItem(prevItem => ({
-          ...prevItem,
-          image: base64String
+        setFormData(prevData => ({
+          ...prevData,
+          base64Image: reader.result.split(',')[1]
         }));
-        setPreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const resetForm = () => {
-    setItem({
-      name: '',
-      cost: '',
-      type: '',
-      color: '',
-      description: '',
-      image: null
-    });
-    setPreview(null);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const API_URL = "https://localhost:8080/itemupload"
+    setError('');
+    setSuccess('');
+    setIsUploading(true);
+
+    const API_URL = 'http://localhost:8080/itemupload';
+
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -61,139 +54,107 @@ const ItemUpload = () => {
           'Authorization':`Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(item)
+        body: JSON.stringify({
+          ...formData,
+          cost: parseInt(formData.cost, 10)
+        }),
       });
-      
+
       if (!response.ok) {
-        
-        toast.error('Error uploading item. Please try again.', {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }else
-      {
-          toast.success('Item uploaded successfully!', {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-          
-        });
-        resetForm()
+        throw new Error('Failed to upload item');
       }
-      
-      
-    } catch (error) {
-      console.error('Error uploading item:', error);
-     
+
+      setSuccess('Item uploaded successfully!');
+      setFormData({
+        name: '',
+        ownerEmail: '',
+        cost: '',
+        type: '',
+        color: '',
+        description: '',
+        base64Image: ''
+      });
+    } catch (err) {
+      setError('An error occurred while uploading the item. Please try again.');
+    } finally {
+      setIsUploading(false);
     }
-   // window.location.reload();
+  };
+
+  const handleUploadAnother = () => {
+    setFormData({
+      name: '',
+      ownerEmail: '',
+      cost: '',
+      type: '',
+      color: '',
+      description: '',
+      base64Image: ''
+    });
+    setSuccess('');
+    setError('');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
-          <div className="max-w-md mx-auto">
-            <div className="flex items-center space-x-5">
-              <div className="h-14 w-14 bg-purple-200 rounded-full flex flex-shrink-0 justify-center items-center text-purple-500 text-2xl font-mono">i</div>
-              <div className="block pl-2 font-semibold text-xl self-start text-gray-700">
-                <h2 className="leading-relaxed">Upload an Item</h2>
-                <p className="text-sm text-gray-500 font-normal leading-relaxed">Enter the details of the item you want to upload.</p>
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+        <div className="md:flex">
+          <div className="p-8 w-full">
+            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">Item Upload</div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="name" name="name" required value={formData.name} onChange={handleChange}
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
               </div>
-            </div>
-            <form className="divide-y divide-gray-200" onSubmit={handleSubmit}>
-              <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                <div className="flex flex-col">
-                  <label className="leading-loose">Item Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={item.name}
-                    onChange={handleChange}
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    placeholder="Enter item name"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="leading-loose">Cost</label>
-                  <input
-                    type="number"
-                    name="cost"
-                    value={item.cost}
-                    onChange={handleChange}
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    placeholder="Enter cost"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="leading-loose">Type</label>
-                  <input
-                    type="text"
-                    name="type"
-                    value={item.type}
-                    onChange={handleChange}
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    placeholder="Enter item type"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="leading-loose">Color</label>
-                  <input
-                    type="text"
-                    name="color"
-                    value={item.color}
-                    onChange={handleChange}
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    placeholder="Enter item color"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="leading-loose">Description</label>
-                  <textarea
-                    name="description"
-                    value={item.description}
-                    onChange={handleChange}
-                    rows="3"
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    placeholder="Enter item description"
-                    required
-                  ></textarea>
-                </div>
-                <div className="flex flex-col">
-                  <label className="leading-loose">Image</label>
-                  <input
-                    type="file"
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    className="px-4 py-2 border focus:ring-purple-500 focus:border-purple-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                    required
-                  />
-                </div>
-                {preview && (
-                  <div className="mt-4">
-                    <img src={preview} alt="Preview" className="mt-2 rounded-md max-h-48 w-auto" />
-                  </div>
-                )}
+              <div>
+                <label htmlFor="ownerEmail" className="block text-sm font-medium text-gray-700">Owner Email</label>
+                <input type="email" id="ownerEmail" name="ownerEmail" required value={formData.ownerEmail} onChange={handleChange}
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
               </div>
-              <div className="pt-4 flex items-center space-x-4">
-                <button
-                  type="submit"
-                  className="bg-purple-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none hover:bg-purple-600 transition-colors duration-300"
-                >
-                  Upload Item
+              <div>
+                <label htmlFor="cost" className="block text-sm font-medium text-gray-700">Cost</label>
+                <input type="number" id="cost" name="cost" required value={formData.cost} onChange={handleChange}
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              </div>
+              <div>
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type</label>
+                <input type="text" id="type" name="type" required value={formData.type} onChange={handleChange}
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              </div>
+              <div>
+                <label htmlFor="color" className="block text-sm font-medium text-gray-700">Color</label>
+                <input type="text" id="color" name="color" required value={formData.color} onChange={handleChange}
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              </div>
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="description" rows="3" required value={formData.description} onChange={handleChange}
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+              </div>
+              <div>
+                <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image</label>
+                <input type="file" id="image" name="image" accept="image/*" onChange={handleImageUpload} required
+                       className="mt-1 block w-full text-sm text-gray-500
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-full file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-purple-50 file:text-purple-700
+                                  hover:file:bg-purple-100" />
+              </div>
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              {success && <div className="text-green-500 text-sm">{success}</div>}
+              <div className="flex justify-between items-center">
+                <button type="submit" disabled={isUploading}
+                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                  {isUploading ? 'Uploading...' : 'Upload Item'}
                 </button>
+                {success && (
+                  <button type="button" onClick={handleUploadAnother}
+                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-purple-600 bg-purple-100 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                    Upload Another Item
+                  </button>
+                )}
               </div>
             </form>
           </div>
@@ -203,4 +164,4 @@ const ItemUpload = () => {
   );
 };
 
-export default ItemUpload;
+export default ItemUploadForm;
