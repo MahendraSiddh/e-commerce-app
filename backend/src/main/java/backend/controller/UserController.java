@@ -74,7 +74,7 @@ public class UserController {
         }catch (RuntimeException e){
             System.err.println(e);
         }
-
+        System.out.println("Verified status:"+verified);
         if(verified)
         {
             String token = userService.registerToken(email,password);

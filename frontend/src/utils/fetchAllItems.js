@@ -1,6 +1,6 @@
 
 async function fetchAllItems() {
-    const API_URL = 'https://localhost:8080/items'; // Replace with your actual API endpoint
+    const API_URL = 'http://localhost:8080/items'; // Replace with your actual API endpoint
 
     const token = localStorage.getItem('token');
     try {

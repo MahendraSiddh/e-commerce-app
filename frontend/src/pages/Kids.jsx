@@ -18,7 +18,7 @@ const Kids = () => {
   },[]);
   return (
     <div>
-      <ShowItems items={items} />
+      <ShowItems items={items} insideCart={false} />
     </div>
   )
 }

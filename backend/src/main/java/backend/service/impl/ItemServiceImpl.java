@@ -2,6 +2,7 @@ package backend.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById(Long id) {
+    public Item getItemById(UUID id) {
        Item item = itemRepository.findById(id).orElse(null);
 
        return item;
