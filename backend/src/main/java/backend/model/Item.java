@@ -26,7 +26,7 @@ public class Item {
 
     private String name;
     private String type;
-    private Long cost;
+    private Integer cost;
     private String color;
     private String description;
 
