@@ -143,9 +143,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Users findByEmail(String ownerEmail) {
-        
-        return userRepository.findByEmail(ownerEmail);
+    public Users findByEmail(String email) {
+        System.out.println("email is"+email);
+        Users user = userRepository.findByEmail(email);
+        System.out.println("user is "+user);
+        return user;
     }
 
 

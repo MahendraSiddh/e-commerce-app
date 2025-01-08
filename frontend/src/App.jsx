@@ -18,6 +18,8 @@ import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import EmailVerify from './pages/EmailVerify';
 import ItemUpload from './pages/ItemUpload';
+import OrderCreation from './pages/OrderCreation';
+import OrderPayment from './pages/OrderPayment';
 
 const App = () => {
   return (
@@ -38,6 +40,7 @@ const App = () => {
             <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>}/>
             <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>}/>
             <Route path='/itemUpload' element={<PrivateRoute><ItemUpload/></PrivateRoute>}/>
+            <Route path='/order_creation' element={<PrivateRoute><OrderCreation/></PrivateRoute>}/>
             <Route path='*' element={<Home/>}/>
           </Routes>
     </div>

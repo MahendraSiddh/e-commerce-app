@@ -12,7 +12,7 @@ import lombok.Setter;
 public class ItemRequest {
     private String name;
     private String ownerEmail;
-    private Long cost;
+    private int cost;
     private String type;
     private String color;
     private String description;
