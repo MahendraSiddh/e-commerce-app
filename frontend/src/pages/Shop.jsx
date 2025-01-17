@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ShowItems from '../components/common/ShowItems'
 
-
-// Function to fetch items based on type=men
-const fetchItemsByType = async ( page, size, token) => {
-  const type = "men";
-  const response = await fetch(
-    `http://localhost:8080/items?type=${type}&page=${page}&size=${size}`,
-    {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+// Function to fetch all items
+const fetchAllItems = async (page, size, token) => {
+  const response = await fetch(`http://localhost:8080/items?page=${page}&size=${size}`, {
+    method: 'GET',
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -23,7 +18,8 @@ const fetchItemsByType = async ( page, size, token) => {
   return response.json();
 };
 
-const Men = () => {
+
+const Shop = () => {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,10 +29,9 @@ const Men = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      let newItems;
 
-      const jsonResponse = await fetchItemsByType( page, 4, token);
-      newItems = jsonResponse.content;
+      const jsonResponse = await fetchAllItems(page, 4, token);
+      const newItems = jsonResponse.content;
 
       if (newItems.length === 0) {
         setHasMore(false); // No more items to fetch
@@ -52,7 +47,7 @@ const Men = () => {
 
   useEffect(() => {
     fetchItems();
-  }, [page]);
+  }, [ page]);
 
   const handleLoadMore = () => {
     setPage((prevPage) => prevPage + 1);
@@ -79,4 +74,4 @@ const Men = () => {
   );
 };
 
-export default Men;
+export default Shop;

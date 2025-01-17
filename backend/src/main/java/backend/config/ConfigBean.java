@@ -10,9 +10,9 @@ import com.razorpay.RazorpayException;
 @Configuration
 public class ConfigBean {
 
-    @Value("")
+    @Value("rzp_test_eDsOsv7EhvfzGB")
     private String key;
-    @Value("")
+    @Value("mY0GOFzxlTn5SnraCDoqzADY")
     private String secret;
     @Bean
     public RazorpayClient getRazorpayClient(){
