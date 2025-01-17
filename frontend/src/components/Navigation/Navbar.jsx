@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaSearch, FaHeart, FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHeart, FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
 
 import isUserLogedin from '../../utils/isUserLogegdin'
 
@@ -21,11 +21,6 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    // search logic here
-  };
 
   const navItems = [
      {
@@ -67,20 +62,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center">
-            <form onSubmit={handleSearch} className="mr-4 ml-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-gray-100 rounded-full py-2 px-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="absolute left-3 top-3 text-gray-500">
-                  <FaSearch />
-                </button>
-              </div>
-            </form>
+            
             {
                !isLogged && <a href='/login' className="inline-block mx-2 px-4 py-2 
               bg-purple-600 hover:bg-purple-700 
@@ -151,22 +133,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="pt-4 pb-3 border-t border-gray-700">
-            <div className="flex items-center px-5">
-              <form onSubmit={handleSearch} className="mt-3 w-full">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="bg-gray-100 w-full rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  <button type="submit" className="absolute left-3 top-3 text-gray-500">
-                    <FaSearch />
-                  </button>
-                </div>
-              </form>
-            </div>
+            
             <div className="mt-3 px-2 space-y-1">
               {
                 !isLogged && <a className="flex items-center text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium w-full" href='/login'>

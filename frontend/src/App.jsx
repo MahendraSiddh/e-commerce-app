@@ -20,6 +20,7 @@ import EmailVerify from './pages/EmailVerify';
 import ItemUpload from './pages/ItemUpload';
 import OrderCreation from './pages/OrderCreation';
 import OrderPayment from './pages/OrderPayment';
+import Shop from './pages/Shop';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='/emailverify' element={<EmailVerify/>} />
+            <Route path='/shop' element={<Shop/>} />
 
              {/* Private Routes */}
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>}/>

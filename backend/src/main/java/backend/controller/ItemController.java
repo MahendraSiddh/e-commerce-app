@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,15 +52,7 @@ public class ItemController {
         }
         
      }
-    @GetMapping("/items")
-    public ResponseEntity<List<Item> > getAllItems()
-    {
-        List<Item> items = itemService.allItems();
-
-        System.out.println("No of items are: "+items.size());
-        return new ResponseEntity<List<Item> >(items,HttpStatus.OK);
-    }
-
+    
     @PostMapping("/addtocart")
     @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<?> addToCart(@RequestParam("id") UUID id, @RequestParam("username") String username){
@@ -83,5 +76,19 @@ public class ItemController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+    // @GetMapping("/items")
+    // public ResponseEntity<Page<Item>> getItems(
+    //         @RequestParam(defaultValue = "0") int page,
+    //         @RequestParam(defaultValue = "4") int size) {
+    //     System.out.println("paged request");
+    //     return ResponseEntity.ok(itemService.getItems(page, size));
+    // }
+    @GetMapping("/items")
+    public ResponseEntity<Page<Item>> getItemsByType(
+            @RequestParam(defaultValue = "all") String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+        if(type.equals("all")) return  ResponseEntity.ok(itemService.getItems( page, size));     
+        return ResponseEntity.ok(itemService.getItemsByType( page, size,type));
+    }
 }

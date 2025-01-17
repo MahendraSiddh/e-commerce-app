@@ -1,31 +1,15 @@
-import React from 'react'
-import { useEffect,useState } from 'react';
-import fetchAllItems from '../utils/fetchAllItems';
-import ShowItems from '../components/common/ShowItems';
+import React from "react";
+import Shop from "./Shop";
+
 
 
 const Home = () => {
 
-  const [items, setItems] = useState([]);
-  
-  useEffect(() => {
-    async function getItems() {
-      const fetchedItems = await fetchAllItems();
-      if (fetchedItems) {
-        setItems(fetchedItems);
-      }
-    }
-    
-    getItems();
-  }, []);
-
-  console.log(items);
-
   return (
-    <div>
-      <ShowItems items={items} insideCart={false} />
+    <div className="container mx-auto p-4">
+      <Shop />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
